@@ -14,16 +14,6 @@ export function ContactSection() {
         </div>
         <div className="mx-auto w-full max-w-sm space-y-4">
           <ContactForm />
-          <p className="text-xs text-foreground/60">
-            You can also reach us by emailing{' '}
-            <a
-              href="mailto:support@codesign.ai"
-              className="underline underline-offset-2 hover:text-primary"
-            >
-              support@codesign.ai
-            </a>
-            .
-          </p>
         </div>
       </div>
     </section>

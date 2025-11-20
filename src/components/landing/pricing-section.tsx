@@ -19,6 +19,7 @@ const tiers = [
     cta: 'Get Started',
     href: '#contact',
     popular: false,
+    isCalendly: false,
   },
   {
     name: 'Pro',
@@ -35,6 +36,7 @@ const tiers = [
     cta: 'Upgrade to Pro',
     href: '#contact',
     popular: true,
+    isCalendly: false,
   },
   {
     name: 'Team',
@@ -51,6 +53,7 @@ const tiers = [
     cta: 'Choose Team',
     href: '#contact',
     popular: false,
+    isCalendly: false,
   },
   {
     name: 'Enterprise',
@@ -65,8 +68,9 @@ const tiers = [
       '24/7 priority support',
     ],
     cta: 'Contact Sales',
-    href: '#contact',
+    href: 'https://calendly.com/codesignai-demo',
     popular: false,
+    isCalendly: true,
   },
 ];
 
@@ -120,7 +124,7 @@ export function PricingSection() {
               </CardContent>
               <CardFooter>
                 <Button asChild className="w-full" variant={tier.popular ? 'default' : 'outline'}>
-                  <Link href={tier.href}>{tier.cta}</Link>
+                  <Link href={tier.href} target={tier.isCalendly ? '_blank' : undefined}>{tier.cta}</Link>
                 </Button>
               </CardFooter>
             </Card>

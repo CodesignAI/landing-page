@@ -68,7 +68,7 @@ const tiers = [
       '24/7 priority support',
     ],
     cta: 'Contact Sales',
-    href: 'https://calendly.com/codesignai-demo',
+    href: 'YOUR_CALENDLY_LINK',
     popular: false,
     isCalendly: true,
   },

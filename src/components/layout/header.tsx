@@ -30,7 +30,7 @@ export function Header() {
         </nav>
         <div className="flex items-center ml-4">
            <Button asChild>
-            <Link href="https://calendly.com/codesignai-demo" target="_blank">Book Demo</Link>
+            <Link href="YOUR_CALENDLY_LINK" target="_blank">Book Demo</Link>
           </Button>
         </div>
       </div>

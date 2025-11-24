@@ -27,7 +27,10 @@ export function Header() {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center ml-4">
+        <div className="flex items-center ml-4 space-x-2">
+           <Button asChild variant="outline">
+            <Link href="#contact">Contact Us</Link>
+          </Button>
            <Button asChild>
             <Link href="YOUR_CALENDLY_LINK" target="_blank">Book Demo</Link>
           </Button>

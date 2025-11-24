@@ -16,6 +16,7 @@ export function HeroSection() {
               in hours, not months.
             </span>
           </p>
+          
           <div className="space-x-4">
             <Button asChild size="lg" variant="outline">
               <Link href="#contact">Contact Us</Link>
@@ -29,3 +30,5 @@ export function HeroSection() {
     </section>
   );
 }
+
+

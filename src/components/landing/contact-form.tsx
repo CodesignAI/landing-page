@@ -41,31 +41,32 @@ export function ContactForm() {
         method="POST"
         data-netlify="true"
         onSubmit={form.handleSubmit(async (values) => {
-          setIsSubmitting(true);
-          try {
-            // Encode form data for Netlify
-            const formData = new URLSearchParams();
-            formData.append('form-name', 'contact');
-            Object.entries(values).forEach(([key, val]) => formData.append(key, String(val)));
+        setIsSubmitting(true);
+        try {
+          const res = await fetch('/api/contact', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(values),
+          });
 
-            const res = await fetch('/', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-              body: formData.toString(),
-            });
+          const result = await res.json();
 
-            if (res.ok) {
-              toast({ title: 'Message Sent!', description: 'We got your message.' });
-              form.reset();
-            } else {
-              toast({ variant: 'destructive', title: 'Error', description: 'Failed to send message.' });
-            }
-          } catch (error) {
-            toast({ variant: 'destructive', title: 'Error', description: 'Something went wrong.' });
-          } finally {
-            setIsSubmitting(false);
+          if (result.success) {
+            toast({ title: 'Message Sent!', description: result.message });
+            form.reset();
+          } else {
+            toast({ variant: 'destructive', title: 'Error', description: result.message });
           }
-        })}
+        } catch (err) {
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: 'Something went wrong.',
+          });
+        } finally {
+          setIsSubmitting(false);
+        }
+      })}
         className="grid gap-4"
       >
         <FormField

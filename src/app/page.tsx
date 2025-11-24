@@ -1,3 +1,5 @@
+export const runtime = 'netlify';
+
 import { HeroSection } from '@/components/landing/hero-section';
 import { ProductSection } from '@/components/landing/product-section';
 import { ContactSection } from '@/components/landing/contact-section';

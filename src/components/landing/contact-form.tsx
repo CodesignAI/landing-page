@@ -38,21 +38,23 @@ export function ContactForm() {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     try {
+      // Send the email directly using EmailJS service (no template email sent back)
       const result = await emailjs.send(
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        undefined, // Remove template_id to avoid auto-response
         {
           from_name: values.name,
           from_email: values.email,
           company: values.company,
           message: values.message,
+          to_email: process.env.NEXT_PUBLIC_RECEIVER_EMAIL, // your email
         },
         process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
       );
 
       console.log('EmailJS result:', result);
 
-      toast({ title: 'Message Sent!', description: 'We got your message.' });
+      toast({ title: 'Message Sent!', description: 'Your message was delivered.' });
       form.reset();
     } catch (err: any) {
       console.error('EmailJS error:', err);

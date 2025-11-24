@@ -37,38 +37,36 @@ export function ContactForm() {
   return (
     <Form {...form}>
       <form
-        name="contact"
-        method="POST"
-        data-netlify="true"
         onSubmit={form.handleSubmit(async (values) => {
-        setIsSubmitting(true);
-        try {
-          const res = await fetch('/api/contact', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-          });
+          setIsSubmitting(true);
+          try {
+            const res = await fetch('/api/contact', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(values),
+            });
 
-          const result = await res.json();
+            const result = await res.json();
 
-          if (result.success) {
-            toast({ title: 'Message Sent!', description: result.message });
-            form.reset();
-          } else {
-            toast({ variant: 'destructive', title: 'Error', description: result.message });
+            if (result.success) {
+              toast({ title: 'Message Sent!', description: result.message });
+              form.reset();
+            } else {
+              toast({ variant: 'destructive', title: 'Error', description: result.message });
+            }
+          } catch (err) {
+            toast({
+              variant: 'destructive',
+              title: 'Error',
+              description: 'Something went wrong.',
+            });
+          } finally {
+            setIsSubmitting(false);
           }
-        } catch (err) {
-          toast({
-            variant: 'destructive',
-            title: 'Error',
-            description: 'Something went wrong.',
-          });
-        } finally {
-          setIsSubmitting(false);
-        }
-      })}
+        })}
         className="grid gap-4"
       >
+        {/* Rest of your form fields remain the same */}
         <FormField
           control={form.control}
           name="name"

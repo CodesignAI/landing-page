@@ -1,129 +1,40 @@
-'use client';
+// app/api/contact/route.ts
+import type { NextRequest } from 'next/server';
 
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+export async function POST(req: NextRequest) {
+  try {
+    const data = await req.json();
+    const { name, email, company, message } = data;
 
-const formSchema = z.object({
-  name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
-  company: z.string().min(2, { message: 'Company name must be at least 2 characters.' }),
-  email: z.string().email({ message: 'Please enter a valid email address.' }),
-  message: z.string().min(10, { message: 'Message must be at least 10 characters.' }),
-});
+    // Example: send email via EmailJS (you need EMAILJS setup)
+    const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        service_id: process.env.EMAILJS_SERVICE_ID,
+        template_id: process.env.EMAILJS_TEMPLATE_ID,
+        user_id: process.env.EMAILJS_USER_ID,
+        template_params: {
+          from_name: name,
+          from_email: email,
+          company,
+          message,
+        },
+      }),
+    });
 
-export function ContactForm() {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+    if (!response.ok) {
+      throw new Error('Failed to send email');
+    }
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: { name: '', company: '', email: '', message: '' },
-  });
-
-  return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(async (values) => {
-          setIsSubmitting(true);
-          try {
-            const res = await fetch('/api/contact', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(values),
-            });
-
-            const result = await res.json();
-
-            if (result.success) {
-              toast({ title: 'Message Sent!', description: result.message });
-              form.reset();
-            } else {
-              toast({ variant: 'destructive', title: 'Error', description: result.message });
-            }
-          } catch (err) {
-            toast({
-              variant: 'destructive',
-              title: 'Error',
-              description: 'Something went wrong.',
-            });
-          } finally {
-            setIsSubmitting(false);
-          }
-        })}
-        className="grid gap-4"
-      >
-        {/* Rest of your form fields remain the same */}
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="sr-only">Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="company"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="sr-only">Company</FormLabel>
-              <FormControl>
-                <Input placeholder="Company" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="sr-only">Email</FormLabel>
-              <FormControl>
-                <Input placeholder="Email" type="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="sr-only">Message</FormLabel>
-              <FormControl>
-                <Textarea placeholder="Your message" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isSubmitting ? 'Sending...' : 'Send Message'}
-        </Button>
-      </form>
-    </Form>
-  );
+    return new Response(JSON.stringify({ success: true, message: 'Message sent!' }), {
+      status: 200,
+    });
+  } catch (err: any) {
+    return new Response(JSON.stringify({ success: false, message: err.message }), {
+      status: 500,
+    });
+  }
 }

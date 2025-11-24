@@ -5,6 +5,12 @@ export async function POST(req: NextRequest) {
     const data = await req.json();
     const { name, email, company, message } = data;
 
+    console.log('Environment check:', {
+      hasServiceId: !!process.env.EMAILJS_SERVICE_ID,
+      hasTemplateId: !!process.env.EMAILJS_TEMPLATE_ID,
+      hasUserId: !!process.env.EMAILJS_USER_ID,
+    });
+
     const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
       method: 'POST',
       headers: {
@@ -23,8 +29,11 @@ export async function POST(req: NextRequest) {
       }),
     });
 
+    const responseData = await response.text();
+    console.log('EmailJS response:', response.status, responseData);
+
     if (!response.ok) {
-      throw new Error('Failed to send email');
+      throw new Error(`EmailJS failed: ${response.status} - ${responseData}`);
     }
 
     return NextResponse.json({ 
@@ -32,9 +41,10 @@ export async function POST(req: NextRequest) {
       message: 'Message sent!' 
     });
   } catch (err: any) {
+    console.error('Contact form error:', err);
     return NextResponse.json({ 
       success: false, 
-      message: err.message 
+      message: err.message || 'Failed to send message'
     }, { 
       status: 500 
     });

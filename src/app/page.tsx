@@ -1,4 +1,4 @@
-export const runtime = 'netlify';
+export const runtime = 'nodejs';
 
 import { HeroSection } from '@/components/landing/hero-section';
 import { ProductSection } from '@/components/landing/product-section';

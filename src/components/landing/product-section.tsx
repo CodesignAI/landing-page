@@ -1,5 +1,20 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
+const features = [
+    {
+        title: 'Automated Analog Optimization',
+        description: 'Let our GenAI handle the heavy lifting, automating complex analog optimization processes and freeing up your engineers for innovation.',
+    },
+    {
+        title: 'Smart Experimentation',
+        description: 'Run thousands of intelligent experiments in the cloud to explore the design space and identify the most robust parameters.',
+    },
+    {
+        title: 'Silicon-Ready Results',
+        description: 'Go from concept to silicon-ready designs in a fraction of the time, drastically reducing development cycles from months to hours.',
+    },
+];
+
 export function ProductSection() {
   return (
     <section id="product" className="w-full py-12 md:py-24 lg:py-32">
@@ -15,43 +30,17 @@ export function ProductSection() {
             </p>
           </div>
         </div>
-        <div className="mx-auto grid max-w-5xl items-center gap-6 py-12 lg:grid-cols-2 lg:gap-12">
-          <div className="flex flex-col justify-center space-y-4">
-            <ul className="grid gap-6">
-              <li>
-                <div className="grid gap-1">
-                  <h3 className="text-xl font-bold">Automated Analog Optimization</h3>
-                  <p className="text-foreground/80">
-                    Let our GenAI handle the heavy lifting, automating complex analog optimization processes and freeing up your engineers for innovation.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <div className="grid gap-1">
-                  <h3 className="text-xl font-bold">Smart Experimentation</h3>
-                  <p className="text-foreground/80">
-                    Run thousands of intelligent experiments in the cloud to explore the design space and identify the most robust parameters.
-                  </p>
-                </div>
-              </li>
-              <li>
-                <div className="grid gap-1">
-                  <h3 className="text-xl font-bold">Silicon-Ready Results</h3>
-                  <p className="text-foreground/80">
-                    Go from concept to silicon-ready designs in a fraction of the time, drastically reducing development cycles from months to hours.
-                  </p>
-                </div>
-              </li>
-            </ul>
-          </div>
-          <Card className="border-primary/20 bg-secondary/30">
-            <CardHeader>
-              <CardTitle>Product Capabilities</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-foreground/80">This section will detail the product's features and benefits. For now, it's a placeholder to demonstrate the layout.</p>
-            </CardContent>
-          </Card>
+        <div className="mx-auto grid max-w-5xl items-stretch gap-8 py-12 sm:grid-cols-1 md:grid-cols-3">
+          {features.map((feature) => (
+            <Card key={feature.title} className="flex flex-col border-primary/20 bg-secondary/30">
+              <CardHeader>
+                <CardTitle>{feature.title}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-foreground/80">{feature.description}</p>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       </div>
     </section>

@@ -17,7 +17,7 @@ export function ContactSection() {
         <div className="mx-auto w-full max-w-sm space-y-4">
           <div className="space-y-2">
             <Button asChild size="lg" className="w-full">
-              <Link href="YOUR_CALENDLY_LINK" target="_blank">Book a Demo</Link>
+              <Link href="https://calendly.com/ouarsef" target="_blank">Book a Demo</Link>
             </Button>
             <p className="text-xs text-foreground/60">or</p>
           </div>

@@ -18,11 +18,8 @@ export function HeroSection() {
           </p>
           
           <div className="space-x-4">
-            <Button asChild size="lg" variant="outline">
-              <Link href="#contact">Contact Us</Link>
-            </Button>
             <Button asChild size="lg">
-              <Link href="YOUR_CALENDLY_LINK" target="_blank">Book Demo</Link>
+              <Link href="https://calendly.com/ouarsef" target="_blank">Book Demo</Link>
             </Button>
           </div>
         </div>

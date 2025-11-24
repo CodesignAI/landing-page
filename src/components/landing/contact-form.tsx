@@ -16,7 +16,6 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import { submitContactForm } from '@/app/actions';
 import { Loader2 } from 'lucide-react';
 
 const formSchema = z.object({
@@ -51,18 +50,31 @@ export function ContactForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      const result = await submitContactForm(values);
-      if (result.success) {
+      // Construct form data for Netlify
+      const formData = new FormData();
+      formData.append('form-name', 'contact'); // must match form name
+      formData.append('name', values.name);
+      formData.append('company', values.company);
+      formData.append('email', values.email);
+      formData.append('message', values.message);
+
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(Object.fromEntries(formData as any)).toString(),
+      });
+
+      if (response.ok) {
         toast({
           title: 'Message Sent!',
-          description: result.message,
+          description: 'Thanks for reaching out. We will get back to you soon!',
         });
         form.reset();
       } else {
         toast({
           variant: 'destructive',
           title: 'Uh oh! Something went wrong.',
-          description: result.message,
+          description: 'Please try again later.',
         });
       }
     } catch (error) {
@@ -78,7 +90,16 @@ export function ContactForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
+      <form
+        name="contact"
+        method="POST"
+        data-netlify="true"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="grid gap-4"
+      >
+        {/* Hidden input required for Netlify Forms */}
+        <input type="hidden" name="form-name" value="contact" />
+
         <FormField
           control={form.control}
           name="name"
@@ -92,6 +113,7 @@ export function ContactForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="company"
@@ -105,6 +127,7 @@ export function ContactForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="email"
@@ -118,6 +141,7 @@ export function ContactForm() {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="message"
@@ -131,6 +155,7 @@ export function ContactForm() {
             </FormItem>
           )}
         />
+
         <Button type="submit" className="w-full" disabled={isSubmitting}>
           {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isSubmitting ? 'Sending...' : 'Send Message'}

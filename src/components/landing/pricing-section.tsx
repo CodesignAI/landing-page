@@ -68,7 +68,7 @@ const tiers = [
       '24/7 priority support',
     ],
     cta: 'Contact Sales',
-    href: 'YOUR_CALENDLY_LINK',
+    href: 'https://calendly.com/ouarsef',
     popular: false,
     isCalendly: true,
   },

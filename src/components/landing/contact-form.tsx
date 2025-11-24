@@ -17,6 +17,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -34,39 +35,36 @@ export function ContactForm() {
     defaultValues: { name: '', company: '', email: '', message: '' },
   });
 
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    setIsSubmitting(true);
+    try {
+      const result = await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        {
+          from_name: values.name,
+          from_email: values.email,
+          company: values.company,
+          message: values.message,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
+      );
+
+      console.log('EmailJS result:', result);
+
+      toast({ title: 'Message Sent!', description: 'We got your message.' });
+      form.reset();
+    } catch (err: any) {
+      console.error('EmailJS error:', err);
+      toast({ variant: 'destructive', title: 'Error', description: err.text || 'Failed to send message' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(async (values) => {
-          setIsSubmitting(true);
-          try {
-            const res = await fetch('/api/contact', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(values),
-            });
-
-            const result = await res.json();
-
-            if (result.success) {
-              toast({ title: 'Message Sent!', description: result.message });
-              form.reset();
-            } else {
-              toast({ variant: 'destructive', title: 'Error', description: result.message });
-            }
-          } catch (err) {
-            toast({
-              variant: 'destructive',
-              title: 'Error',
-              description: 'Something went wrong.',
-            });
-          } finally {
-            setIsSubmitting(false);
-          }
-        })}
-        className="grid gap-4"
-      >
-        {/* Rest of your form fields remain the same */}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
         <FormField
           control={form.control}
           name="name"

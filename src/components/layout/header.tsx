@@ -7,7 +7,6 @@ import { Logo } from '@/components/logo';
 export function Header() {
   const navLinks = [
     { href: '#product', label: 'Product' },
-    { href: '#pricing', label: 'Pricing' },
     { href: '#contact', label: 'Contact Us' },
   ];
 

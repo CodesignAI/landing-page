@@ -35,34 +35,39 @@ export function ContactForm() {
     defaultValues: { name: '', company: '', email: '', message: '' },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    setIsSubmitting(true);
-    try {
-      // Send the email directly using EmailJS service (no template email sent back)
-      const result = await emailjs.send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        undefined, // Remove template_id to avoid auto-response
-        {
-          from_name: values.name,
-          from_email: values.email,
-          company: values.company,
-          message: values.message,
-          to_email: process.env.NEXT_PUBLIC_RECEIVER_EMAIL, // your email
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
-      );
+const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  setIsSubmitting(true);
+  
+  // Debug: Check what we have
+  console.log('Environment variables:', {
+    serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID,
+    templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID,
+    userId: process.env.NEXT_PUBLIC_EMAILJS_USER_ID,
+  });
+  
+  try {
+    const result = await emailjs.send(
+      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+      {
+        from_name: values.name,
+        from_email: values.email,
+        company: values.company,
+        message: values.message,
+      },
+      process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
+    );
 
-      console.log('EmailJS result:', result);
-
-      toast({ title: 'Message Sent!', description: 'Your message was delivered.' });
-      form.reset();
-    } catch (err: any) {
-      console.error('EmailJS error:', err);
-      toast({ variant: 'destructive', title: 'Error', description: err.text || 'Failed to send message' });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    console.log('EmailJS result:', result);
+    toast({ title: 'Message Sent!', description: 'We got your message.' });
+    form.reset();
+  } catch (err: any) {
+    console.error('EmailJS error:', err);
+    toast({ variant: 'destructive', title: 'Error', description: err.text || 'Failed to send message' });
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   return (
     <Form {...form}>

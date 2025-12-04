@@ -6,7 +6,7 @@ import { Logo } from '@/components/logo';
 
 export function Header() {
   const navLinks = [
-    { href: '#product', label: 'Product' },
+    // { href: '#product', label: 'Product' },
     { href: '#contact', label: 'Contact Us' },
   ];
 
@@ -29,7 +29,7 @@ export function Header() {
         </nav>
         <div className="flex items-center ml-4 space-x-2">
            <Button asChild size="lg">
-            <Link href="https://calendly.com/ouarsef" target="_blank">Book Demo</Link>
+            <Link href="https://calendly.com/codesignai" target="_blank">Book Demo</Link>
           </Button>
         </div>
       </div>

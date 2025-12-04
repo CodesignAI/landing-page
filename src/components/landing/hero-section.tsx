@@ -7,11 +7,10 @@ export function HeroSection() {
       <div className="container px-4 md:px-6 text-center">
         <div className="flex flex-col items-center space-y-6">
           <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
-            The AI engine for analog design
+            AI-powered engine to accelerate analog and mixed-signals circuits design time
           </h1>
           <p className="mx-auto max-w-[700px] text-foreground/80 md:text-xl">
-            CoDesignAI automates complex analog optimization, runs thousands of smart experiments,
-            and delivers silicon-ready results —{' '}
+            CoDesignAI is a patented, AI-powered SaaS that plugs into existing simulators and acts as an autonomous design agent to run thousands of simulations to reach optimum specifications —{' '}
             <span className="text-primary font-semibold text-xl md:text-2xl">
               in hours, not months.
             </span>
@@ -19,7 +18,7 @@ export function HeroSection() {
           
           <div className="space-x-4">
             <Button asChild size="lg">
-              <Link href="https://calendly.com/ouarsef" target="_blank">Book Demo</Link>
+              <Link href="https://calendly.com/codesignai" target="_blank">Book Demo</Link>
             </Button>
           </div>
         </div>

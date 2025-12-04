@@ -1,16 +1,20 @@
-import Link from 'next/link';
-import { cn } from '@/lib/utils';
+import Link from "next/link";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
+import logo from "../app/logo.png";
 
 export function Logo({ className }: { className?: string }) {
   return (
     <Link
       href="/"
-      className={cn(
-        'font-bold text-xl md:text-2xl text-foreground font-headline tracking-tighter',
-        className
-      )}
+      className={cn("flex items-center", className)}
     >
-      CoDesign<span className="text-primary">AI</span>
+      <Image
+        src={logo}
+        alt="CoDesignAI Logo"
+        className="h-12 w-auto"
+        priority
+      />
     </Link>
   );
 }
